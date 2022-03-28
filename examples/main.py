@@ -7,11 +7,10 @@ from path import Path
 import os
 from word_detector import detect, prepare_img, sort_multiline
 
-
 def get_img_files(data_dir: Path) -> List[Path]:
     """Return all image files contained in a folder."""
     res = []
-    for ext in ['*.png', '*.jpg', '*.bmp']:
+    for ext in ['*.png', '*.jpg', '*.bmp', '*.jfif']:
         res += Path(data_dir).files(ext)
     return res
 
@@ -19,11 +18,11 @@ def cropImg(xs, ys, img, i):
     #croppedImg = img.crop((xs[0], ys[0], xs[2], ys[1])) # left top right bottom
     croppedImg = img[ys[0]:ys[1], xs[0]:xs[2]]
     # plt.imshow(croppedImg)
-    print("Cropped img: {}".format(croppedImg))
-    image = Image.fromarray(croppedImg)
+    # print("Cropped img: {}".format(croppedImg))
+    # image = Image.fromarray(croppedImg)
     # print(str(img[1][1]))
     # print(str(croppedImg[1][1]))
-    # image = Image.fromarray(croppedImg)
+    image = Image.fromarray(croppedImg)
     # image.show()
     im1 = image.save("{}.png".format(i))
     img_path = 'D:/project/WordDetector/examples/{}.png'.format(i)
@@ -71,8 +70,8 @@ def main():
 
 
 
-                # plt.plot(xs, ys, c=colors(line_idx % num_colors))
-                # plt.text(det.bbox.x, det.bbox.y, f'{line_idx}/{word_idx}')
+                plt.plot(xs, ys, c=colors(line_idx % num_colors))
+                plt.text(det.bbox.x, det.bbox.y, f'{line_idx}/{word_idx}')
 
                 cropImg(xs, ys, img, word_idx)
 
