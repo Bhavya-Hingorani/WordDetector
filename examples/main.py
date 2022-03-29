@@ -59,6 +59,8 @@ def main():
         num_colors = 7
         colors = plt.cm.get_cmap('rainbow', num_colors)
         for line_idx, line in enumerate(lines):
+            f = open("D:/project/WordDetector/Output/output.txt", "w")
+            f.write("")
             for word_idx, det in enumerate(line):
                 xs = [det.bbox.x, det.bbox.x, det.bbox.x + det.bbox.w, det.bbox.x + det.bbox.w, det.bbox.x]
                 ys = [det.bbox.y, det.bbox.y + det.bbox.h, det.bbox.y + det.bbox.h, det.bbox.y, det.bbox.y]
@@ -67,8 +69,6 @@ def main():
                 # print(xs)
                 # print(ys)
                 # print("---------------------")
-
-
 
                 plt.plot(xs, ys, c=colors(line_idx % num_colors))
                 plt.text(det.bbox.x, det.bbox.y, f'{line_idx}/{word_idx}')
