@@ -25,8 +25,8 @@ def cropImg(xs, ys, img, i):
     # print(str(croppedImg[1][1]))
     image = Image.fromarray(croppedImg)
     # image.show()
-    im1 = image.save("{}.png".format(i))
-    img_path = 'D:/project/WordDetector/examples/{}.png'.format(i)
+    im1 = image.save("img.png")
+    img_path = 'D:/project/WordDetector/examples/img.png'
     os.system('python D:/project/SimpleHTR/src/main.py --img_file {}'.format(img_path))
     
     return croppedImg
@@ -35,11 +35,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data', type=Path, default=Path('../data/line'))
     parser.add_argument('--file_name', type=str, default='../data/custom_lines/custom_2.png')
+    parsed = parser.parse_args()
+    image = cv2.imread(parsed.file_name)
     parser.add_argument('--kernel_size', type=int, default=25)
     parser.add_argument('--sigma', type=float, default=11)
     parser.add_argument('--theta', type=float, default=7)
     parser.add_argument('--min_area', type=int, default=100)
-    parser.add_argument('--img_height', type=int, default=50)
+    parser.add_argument('--img_height', type=int, default=image.shape[0])
     parsed = parser.parse_args()
 
 
