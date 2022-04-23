@@ -1,6 +1,7 @@
 import argparse
 from tokenize import String
 from typing import List
+import streamlit as st
 from PIL import Image
 import cv2
 import matplotlib.pyplot as plt
@@ -14,6 +15,10 @@ from word_detector import detect, prepare_img, sort_multiline
 #     for ext in ['*.png', '*.jpg', '*.bmp', '*.jfif']:
 #         res += Path(data_dir).files(ext)
 #     return res
+
+def load_image(image_file):
+	img = Image.open(image_file)
+	return img
 
 def cropImg(xs, ys, img, i):
     #croppedImg = img.crop((xs[0], ys[0], xs[2], ys[1])) # left top right bottom
@@ -32,23 +37,39 @@ def cropImg(xs, ys, img, i):
     return croppedImg
 
 def main():
+    st.markdown("<h1 style='text-align: center; color: orange;'>Code2Capture</h1>", unsafe_allow_html=True)
+    st.subheader("Image")
+    image_file = st.file_uploader("Upload Images", type=["png","jpg","jpeg"])
+
+    if image_file is not None:
+
+        # To See details
+        # file_details = {"filename":image_file.name, "filetype":image_file.type,
+        #                       "filesize":image_file.size}
+        # st.write(file_details)
+        # To View Uploaded Image
+        wd('../data/custom_lines/{}'.format(image_file.name))
+
+def wd(fileName):
     parser = argparse.ArgumentParser()
     parser.add_argument('--data', type=Path, default=Path('../data/line'))
-    parser.add_argument('--file_name', type=str, default='../data/custom_lines/custom_2.png')
+    parser.add_argument('--file_name', type=str, default='../data/custom_lines/{}')
     parsed = parser.parse_args()
-    image = cv2.imread(parsed.file_name)
+    image = cv2.imread(fileName)
     parser.add_argument('--kernel_size', type=int, default=25)
     parser.add_argument('--sigma', type=float, default=11)
     parser.add_argument('--theta', type=float, default=7)
     parser.add_argument('--min_area', type=int, default=100)
-    parser.add_argument('--img_height', type=int, default=image.shape[0])
+    parser.add_argument('--img_height', type=int, default=50)
     parsed = parser.parse_args()
 
+    image = Image.open(fileName)
 
+    st.image(image, caption='Uploded Image')
     # print(f'Processing file {fn_img}')
 
     # load image and process it
-    img = prepare_img(cv2.imread(parsed.file_name), parsed.img_height)
+    img = prepare_img(cv2.imread(fileName), parsed.img_height)
     detections = detect(img,
                         kernel_size=parsed.kernel_size,
                         sigma=parsed.sigma,
@@ -79,6 +100,9 @@ def main():
 
             cropImg(xs, ys, img, word_idx)
 
+    f = open("D:/project/WordDetector/Output/output.txt",'r')
+    outputString = f.read()
+    st.write(outputString)
     plt.show()
 
 
